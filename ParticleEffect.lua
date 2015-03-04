@@ -28,7 +28,7 @@ particle.New=function(s,p,v)
 	n.Life=l or 5
 
 	n.Frame=function()
-		if Life<0 then n.Sprite[1]=''
+		if Life<0 then n.Sprite[1]='' end
 		deltaTime=os.clock()-time
 		for k,v in pairs(n.Position) do
 			n.Position[k]=v+n.Velocity[k] --universal for any amount of dimensions
