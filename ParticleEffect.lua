@@ -28,7 +28,7 @@ particle.New=function(s,p,v)
 	n.Life=l or 5
 
 	n.Frame=function()
-		if Life<0 then n.Sprite[1]='' end
+		if n.Life<0 then n.Sprite[1]='' end
 		deltaTime=os.clock()-time
 		for k,v in pairs(n.Position) do
 			n.Position[k]=v+n.Velocity[k] --universal for any amount of dimensions
@@ -36,6 +36,8 @@ particle.New=function(s,p,v)
 		n.Life=n.Life-deltaTime
 		time=os.clock()
 	end
+
+	return n
 end
 
 --static
@@ -82,7 +84,7 @@ lib.New=function(s,p,sz,st,wt)
 		end
 	end
 
-	n.Emmit=function(default,velocity,amount,m,modifier) --default particle, velocity of particles, amount of particles, number of masks to use, modifier
+	n.Emmit=function(default,amount,m,modifier) --default particle, amount of particles, number of masks to use, modifier
 		--generate masks
 		local masks={}
 
@@ -93,7 +95,7 @@ lib.New=function(s,p,sz,st,wt)
 				if type(v)=='table' then
 					for kk,vv in pairs(v) do
 						if type(vv)=='number' then
-							mask[k][kk]=vv*math.random((modifier[k][kk].min or modifier.min),(modifier[k][kk].max or modifier.max))
+							mask[k][kk]=vv*math.random((modifier.min),(modifier.max))
 						end
 					end
 				end
