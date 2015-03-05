@@ -23,19 +23,25 @@ local particle={}
 
 particle.New=function(s,p,v)
 	local n={}
+
 	local time=os.clock()
 	local deltaTime=0
+	n.__type='Particle'
 
-	n.Sprite=s  or  {' ';0;0;}
-	n.Position=p or {x=1;y=1;}
-	n.Velocity=v or {x=0;y=0;}
-	n.Life=l or 5
+	if type(s)=='table' and s.__type=='Particle' then n=deepcopy(s) 
+	else
+		n.Sprite=s  or  {' ';0;0;}
+		n.Position=p or {x=1;y=1;}
+		n.Velocity=v or {x=0;y=0;}
+		n.Life=l or 5
+	end
 
 	n.Frame=function()
+		Debug.Print(n.Position.y)
 		if n.Life<0 then n.Sprite[1]='' end
 		deltaTime=os.clock()-time
 		for k,v in pairs(n.Position) do
-			n.Position[k]=v+n.Velocity[k] --universal for any amount of dimensions
+			n.Position[k]=tonumber(v+n.Velocity[k]) --universal for any amount of dimensions
 		end
 		n.Life=n.Life-deltaTime
 		time=os.clock()
@@ -77,7 +83,7 @@ lib.New=function(s,p,sz,st,wt)
 			local mask=masks[math.random(1,#masks)]
 			local np={}
 
-			np=deepcopy(mask)
+			np=particle.New(mask)
 
 			if fn then np=fn(np,mask,masks) end
 			table.insert(particles,np)

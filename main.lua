@@ -19,12 +19,12 @@ local MyParticle=Particle.New()
 MyParticle.Sprite[1]='X'
 MyParticle.Sprite[2]=colours.blue
 MyParticle.Sprite[3]=colours.grey
-MyParticle.Velocity.y=10
+MyParticle.Velocity.y=1
 
 MyParticleEffect.Position.x=20
 MyParticleEffect.Position.y=5
 
-MyParticleEffect.Emmit(MyParticle,5,10,{min=1;max=3;})
+MyParticleEffect.Emmit(MyParticle,5,10,{min=1;max=2;})
 
 for i=1,10 do
 	Debug.Clear()
