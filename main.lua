@@ -8,20 +8,28 @@ local function load( path )
 	error(err,0)
 end
 
+load'Debug.lua'
 load'ParticleEffect.lua'
+
+local w,h=term.getSize()
 
 local MyParticleEffect=ParticleEffect.New()
 local MyParticle=Particle.New()
 
 MyParticle.Sprite[1]='X'
 MyParticle.Sprite[2]=colours.blue
-MyParticle.Sprite[3]=colours.red
-MyParticle.Velocity.y=-1
+MyParticle.Sprite[3]=colours.grey
+MyParticle.Velocity.y=10
 
 MyParticleEffect.Position.x=20
 MyParticleEffect.Position.y=5
 
-MyParticleEffect.Emmit(MyParticle,5,2,{min=1;max=3;})
+MyParticleEffect.Emmit(MyParticle,5,10,{min=1;max=3;})
 
-MyParticleEffect.Frame()
-MyParticleEffect.Render()
+for i=1,10 do
+	Debug.Clear()
+	Debug.Print(i,'Frame',true)
+	MyParticleEffect.Frame()
+	MyParticleEffect.Render()
+	sleep(0.2)
+end

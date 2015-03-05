@@ -13,6 +13,10 @@ local function deepcopy(orig)
     return copy
 end
 
+local colours=deepcopy(colors)
+for k,v in pairs(colours) do  --debug
+	colours[v]=k
+end
 
 local lib={}
 local particle={}
@@ -56,12 +60,12 @@ lib.New=function(s,p,sz,st,wt)
 	n.WaitTime=wt or 1
 	
 	local particles={}
-
+	
 	n.Render=function()
 		for i,p in ipairs(particles) do
 			term.setCursorPos(n.Position.x+p.Position.x,n.Position.y+p.Position.y)
-			if p.Sprite[2]>0 then term.setTextColor(p.Sprite[2]) end
-			if p.Sprite[3]>0 then term.setBackgroundColor(p.Sprite[3]) end
+			if p.Sprite[2]>0 then term.setTextColour(p.Sprite[2]) end
+			if p.Sprite[3]>0 then term.setBackgroundColour(p.Sprite[3]) end
 			term.write(p.Sprite[1])
 		end
 	end
@@ -92,7 +96,7 @@ lib.New=function(s,p,sz,st,wt)
 			local mask=deepcopy(default)
 			
 			for k,v in pairs(mask) do
-				if type(v)=='table' then
+				if type(v)=='table' and k~='Sprite' then
 					for kk,vv in pairs(v) do
 						if type(vv)=='number' then
 							mask[k][kk]=vv*math.random((modifier.min),(modifier.max))
@@ -114,7 +118,7 @@ lib.New=function(s,p,sz,st,wt)
 
 	n.Frame=function()
 		for k,v in pairs(particles) do
-			v.Frame()
+			particles[k].Frame()
 		end
 	end
 
