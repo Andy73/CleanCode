@@ -24,4 +24,12 @@ lib.Clear=function()
 	term.clear()
 end
 
+lib.BottomLeft=function(str)
+	str=tostring(str)
+	term.setCursorPos(1,h)
+	term.setBackgroundColour(colours.black)
+	term.setTextColour(colours.white)
+	term.write(str)
+end
+
 _G.Debug=lib

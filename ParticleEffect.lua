@@ -21,7 +21,7 @@ end
 local lib={}
 local particle={}
 
-particle.New=function(s,p,v)
+particle.New=function(s,p,v,a,l)
 	local n={}
 
 	local time=os.clock()
@@ -33,6 +33,7 @@ particle.New=function(s,p,v)
 		n.Sprite=s  or  {' ';0;0;}
 		n.Position=p or {x=1;y=1;}
 		n.Velocity=v or {x=0;y=0;}
+		n.Acceleration=a or {x=0;y=0;}
 		n.Life=l or 5
 	end
 
@@ -40,6 +41,9 @@ particle.New=function(s,p,v)
 		Debug.Print(n.Position.y)
 		if n.Life<0 then n.Sprite[1]='' end
 		deltaTime=os.clock()-time
+		for k,v in pairs(n.Velocity) do
+			n.Velocity[k]=v+(n.Acceleration[k]*deltaTime)
+		end
 		for k,v in pairs(n.Position) do
 			n.Position[k]=tonumber(v+n.Velocity[k]) --universal for any amount of dimensions
 		end
@@ -118,14 +122,48 @@ lib.New=function(s,p,sz,st,wt)
 			generateMask()
 		end
 
+		local function modify( n )
+			for k,v in pairs(n) do
+				if type(v)=="table" and k~="Sprite" then
+					for i,val in pairs(v) do
+						if type(val)=="number" then
+							n[k][i]=val*((math.random(2)==1 and 0.99 or 1.01)*(math.random(2)==1 and 1 or 1.1))
+						end
+					end
+				end
+			end
+			return n
+		end
+
 		--emmit
-		n.EmmitRaw(amount,nil,unpack(masks)) --TODO not nil
+		n.EmmitRaw(amount,modify,unpack(masks)) --TODO/DONE not nil
 	end
 
 	n.Frame=function()
 		for k,v in pairs(particles) do
 			particles[k].Frame()
 		end
+	end
+
+	n.GetHighestValue=function(val)
+		local result
+		for k,v in pairs(particles) do   --v=particle({})
+			if type(v)=="table" then
+				for i,vv in pairs(v) do  --vv=particle property({})/method(fn)
+					if type(vv)=="table" and i==val then --property only, check for name
+						local sum
+						for _,x in pairs(vv) do --x=particle property value(num/str)
+							if type(x)=="number" then
+								if not sum then sum=0 end
+								sum=sum+x
+							end
+						end
+						if sum and (not result or sum>result) then result=sum end
+					end
+				end
+			end
+		end
+		return result
 	end
 
 	return n

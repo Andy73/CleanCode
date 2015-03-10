@@ -20,6 +20,7 @@ MyParticle.Sprite[1]='X'
 MyParticle.Sprite[2]=colours.blue
 MyParticle.Sprite[3]=colours.grey
 MyParticle.Velocity.y=1
+MyParticle.Acceleration.x=1
 
 MyParticleEffect.Position.x=20
 MyParticleEffect.Position.y=5
@@ -29,6 +30,7 @@ MyParticleEffect.Emmit(MyParticle,5,10,{min=1;max=2;})
 for i=1,10 do
 	Debug.Clear()
 	Debug.Print(i,'Frame',true)
+	Debug.BottomLeft(MyParticleEffect.GetHighestValue('Acceleration'))
 	MyParticleEffect.Frame()
 	MyParticleEffect.Render()
 	sleep(0.2)
