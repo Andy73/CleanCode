@@ -24,12 +24,21 @@ lib.Clear=function()
 	term.clear()
 end
 
-lib.BottomLeft=function(str)
+local function CornerPrint( str ) --TODO include positioning
 	str=tostring(str)
-	term.setCursorPos(1,h)
 	term.setBackgroundColour(colours.black)
 	term.setTextColour(colours.white)
 	term.write(str)
+end
+
+lib.BottomLeft=function(str)
+	term.setCursorPos(1,h)
+	CornerPrint(str)
+end
+
+lib.TopLeft=function(str)
+	term.setCursorPos(1,1)
+	CornerPrint(str)
 end
 
 _G.Debug=lib
