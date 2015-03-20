@@ -18,6 +18,10 @@ lib.Print=function(str,name,d)
 	if i>h then i=1 end
 end
 
+lib.PrintTable=function(tbl,...)
+	return lib.Print(textutils.serialize(tbl),...)
+end
+
 lib.Clear=function()
 	term.setBackgroundColour(colours.black)
 	term.setTextColour(colours.white)
