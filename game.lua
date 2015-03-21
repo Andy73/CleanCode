@@ -16,11 +16,13 @@ local w,h=term.getSize()
 local RunGameMenu=true
 
 local entries={
-	[1]={"Play",function()print"STOP";sleep(2);RunGameMenu=false;end},
-	[2]={"Test",function()term.clear();sleep(2);end},
-	[3]={"Hmmm",function()term.setBackgroundColour(colours.white);term.clear();sleep(2);end},
+	["MainMenu"]={
+		[1]={"Play",function()print"STOP";sleep(2);RunGameMenu=false;end},
+		[2]={"Test",function()term.clear();sleep(2);end},
+		[3]={"Hmmm",function()term.setBackgroundColour(colours.white);term.clear();sleep(2);end},
+	},
 }
-local selected = 1
+local menu,selected = "MainMenu",1
 
 local function printMenu()
 	term.setBackgroundColour(colours.grey)
@@ -30,7 +32,7 @@ local function printMenu()
 	term.setCursorPos(8,4)
 	term.write"CleanCode"
 
-	for i,v in ipairs(entries) do
+	for i,v in ipairs(entries[menu]) do
 		term.setCursorPos(2,i*2+5)
 		term.setBackgroundColour(selected==i and colours.lightGrey or colours.grey)
 		term.write(" "..v[1]..string.rep(" ",4))
