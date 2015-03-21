@@ -8,6 +8,11 @@ local function load( path )
 	error(err,0)
 end
 
+local function s()
+	os.queueEvent"QuickSleep"
+	coroutine.yield"QuickSleep"
+end
+
 load 'Debug.lua'
 load 'ParticleEffect.lua'
 
