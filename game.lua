@@ -58,9 +58,8 @@ local function GameMenu()
 	while RunGameMenu do
 		c=c+1
 		os.startTimer(1)
-		--Debug.Print(c)
 		local ev={os.pullEvent()}
-		--Debug.Print(textutils.serialize(ev))
+
 		if ev[1]=="mouse_click" then
 			if ev[3]<w/3 then
 				local index=math.ceil((ev[4]-5)/2)
@@ -72,11 +71,6 @@ local function GameMenu()
 				end
 			end
 		elseif ev[1]=="key" then
-			--[[if ev[2]==keys.enter then
-				if entries[menu][selected] then
-					entries[menu][selected][2]()
-				end
-			end]]
 			local case={
 				[keys.enter]=function()
 					if entries[menu][selected] then
@@ -99,13 +93,10 @@ local function GameMenu()
 	end
 end
 
---GameMenu()
-
 local c=coroutine.create(GameMenu)
 coroutine.resume(c)
 
 while true do
-	--printMenu()
 	local ev = {os.pullEvent()}
 	local ok,err=coroutine.resume(c,unpack(ev))
 	if not ok then error("Ended "..tostring(err or "(status:?)"),0)
