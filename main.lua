@@ -1,6 +1,7 @@
 local Path = "/"..shell.resolve"./".."/"
 local t=true
 local w,h=term.getSize()
+local doCredits=false
 
 local function load( path )
 	path=Path..path
@@ -195,16 +196,19 @@ term.setTextColour(colours.white)
 
 local s,x,y=0.1,w/5,h/3
 
-sw("AndySoft presents...",s,x,y,1)
-sw("In association with Herobrine Technologies",0,x-5,y+2,0)
-sleep(0.1)
-sw("and Aperture Science",0,x+2,y+4,0)
-sleep(0.4)
-parallel.waitForAll(function()sw("and Aperture Science",s,x+2,y+4,-1)end,function()sw("In association with Herobrine Technologies",0,x-5,y+2,-1)end)
-sleep(0.5)
-sw("A MIT-licensed game",s,x,y,0.8)
-sleep(0.2)
-sw("CleanCode",0,math.floor(w/2)-4,math.floor(h/2),3)
+if doCredits then
+	sw("AndySoft presents...",s,x,y,1)
+	sw("In association with Herobrine Technologies",0,x-5,y+2,0)
+	sleep(0.1)
+	sw("and Aperture Science",0,x+2,y+4,0)
+	sleep(0.4)
+	parallel.waitForAll(function()sw("and Aperture Science",s,x+2,y+4,-1)end,function()sw("In association with Herobrine Technologies",0,x-5,y+2,-1)end)
+	sleep(0.5)
+	sw("A MIT-licensed game",s,x,y,0.8)
+	sleep(0.2)
+	sw("CleanCode",0,math.floor(w/2)-4,math.floor(h/2),3)
+	sleep(1)
+end
 
 --/TODO
 
@@ -213,6 +217,6 @@ local f=fs.open(Path.."game.lua","r")
 local c=f.readAll()
 f.close()
 local fn=loadstring(c)
-return fn(levels,level,load,s,saveLevel,saveGame,loadLevel)
+return fn(levels,level,load,s,saveLevel,saveGame,loadLevel,sw)
 
 
