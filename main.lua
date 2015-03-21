@@ -152,47 +152,20 @@ end
 
 --TODO/IN_PROGRESS: add "AndySoft presents..." etc
 
---[[local function sw( txt, w8, x, y ) --slowwrite
-	txt=tostring(txt).." "
-	if not x and y then x,y=term.getCursorPos() end
-	term.setCursorPos(x,y)
-	local c={colours.white,colours.lightGrey,colours.grey}
-	for i=1,#txt do
-		for ii=0,3 do
-			term.setCursorPos(x+i+ii,y)
-			term.setTextColour(c[ii+1])
-			term.write(i+ii<#txt and txt:sub(i+ii,i+ii) or "")
-		end
-		sleep(w8 or 0)
-	end
-end
-
-local function rsw( txt, w8, x, y ) --reverse slowwrite
-	txt=tostring(txt).." "
-	if not x and y then x,y=term.getCursorPos() end
-	term.setCursorPos(x,y)
-	local c={colours.black,colours.grey,colours.lightGrey,colours.white}
-	for i=1,#txt do
-		for ii=0,3 do
-			term.setCursorPos(x+i+ii,y)
-			term.setTextColour(c[ii+1])
-			term.write(ii==0 and " " or (i+ii<#txt and txt:sub(i+ii,i+ii) or ""))
-		end
-		sleep(w8 or 0)
-	end
-end]]
-
 local function sw( txt, w8, x, y, reverse ) --slowwrite
 	txt=tostring(txt).." "
 	if not x and y then x,y=term.getCursorPos() end
 	term.setCursorPos(x,y)
 	local cl={colours.white,colours.lightGrey,colours.grey,colours.black}
 	local c={}
+	--reverse is actually the time the function waits before reversing the animation.
 	if reverse<0 then
+		--reorder the colours
 		for i,v in ipairs(cl) do
 			c[#cl-i+1]=v
 		end
 	else
+		--if this isn't the reversing call, leave them be
 		c=cl
 	end
 
@@ -200,12 +173,18 @@ local function sw( txt, w8, x, y, reverse ) --slowwrite
 		for ii=0,#c-1 do
 			term.setCursorPos(x+i+ii,y)
 			term.setTextColour(c[ii+1])
+			--[[ComputerCraft won't write text with black colour on black background, therefore
+			we have to set the string to " " when writing in black colour. Furthemore, black
+			colour is either the first or the last one in the c table, depending on whether
+			we reverse the algorithm or not. The last part of the following line prevents
+			attempt to index ? errors of string.sub]]
 			term.write(ii==(reverse<0 and 0 or #c-1) and " " or (i+ii<#txt and txt:sub(i+ii,i+ii) or ""))
 		end
 		sleep(w8 or 0)
 	end
 
 	if reverse>0 then
+		--if this call wasn't the reversing one, sleep and reverse now.
 		sleep(reverse)
 		return sw(txt,w8,x,y,reverse*(-1))
 	end
