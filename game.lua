@@ -1,5 +1,9 @@
+local Path = "/"..shell.resolve"./".."/"
+local t=true
+local w,h=term.getSize()
+
 local function load( path )
-	path='/'..shell.resolve'./'.."/"..path
+	path=Path..path
 	local f=fs.open(path,'r')
 	print('Loading '..path)
 	local fn,err=loadstring(f.readAll(),'lib @'..path)
@@ -13,14 +17,36 @@ local function s()
 	coroutine.yield"QuickSleep"
 end
 
+local function saveGame(data,a)
+	local f=fs.open(Path.."Save.json",(a and"a"or"w"))
+	f.write(data)
+	f.close()
+end
+
+local function loadLevel(name)
+	name=Path.."Levels/"..tostring(name)
+	local f=fs.open(name,"r")
+	local c=f.readAll()
+	f.close()
+	return json.decode(c)
+end
+
+local function saveLevel(name,data)
+	name=Path.."Levels/"..tostring(name)..".json"
+	data=json.encode(data)
+	local f=fs.open(name,"w")
+	f.write(data)
+	return f.close()
+end
+
 load 'Debug.lua'
 load 'ParticleEffect.lua'
 
-local w,h=term.getSize()
-
-local RunGameMenu=true
+os.loadAPI(Path.."json")
 
 
+
+local RunGameMenu=t
 local menu,selected = "MainMenu",1
 
 local entries={
@@ -31,12 +57,22 @@ local entries={
 		[4]={"Profile",function()end},
 	},
 	["PlayMenu"]={
-		[1]={"Career",function()end},
+		[1]={"Career",function()menu="LevelsMenu";selected=1;end},
 		[2]={"Community",function()end},
 		[3]={"< Back",function()menu="MainMenu";selected=1;end},
 	},
+	["LevelsMenu"]={},
 }
 
+local level=false
+local levels={}
+
+--load levels
+local list=fs.list(Path.."Levels/")
+for i,v in ipairs(list) do
+	levels[i]=loadLevel(v)
+	entries["LevelsMenu"][i]={levels[#levels].name,function()level=i;error()end} --TODO add actual play
+end
 
 local function printMenu()
 	term.setBackgroundColour(colours.grey)
@@ -52,7 +88,6 @@ local function printMenu()
 		term.write(" "..v[1]..string.rep(" ",4))
 	end
 end
-
 local function GameMenu()
 	local c = 0
 	while RunGameMenu do
@@ -93,6 +128,10 @@ local function GameMenu()
 	end
 end
 
+
+
+--CODE
+
 local c=coroutine.create(GameMenu)
 coroutine.resume(c)
 
@@ -108,5 +147,20 @@ term.setBackgroundColour(colours.black)
 for i=1,h do
 	term.setCursorPos(1,i)
 	term.clearLine()
-	s()
+	sleep(0)
 end
+
+--TODO: add "AndySoft presents..." etc
+
+
+print(level)
+
+local hello_world={
+	name="Hello World",
+	desc="Welcome to ComputerCraft! Your task today will be to write 'Hello World' on the screen.",
+	hnts={"Use the 'print' function to write text.","Most functions need arguments. Those are supplied in brackets, e.g. 'print(\"asdf\")'."},
+
+}
+
+--saveLevel("hello_world",hello_world)
+
