@@ -20,14 +20,23 @@ local w,h=term.getSize()
 
 local RunGameMenu=true
 
+
+local menu,selected = "MainMenu",1
+
 local entries={
 	["MainMenu"]={
-		[1]={"Play",function()print"STOP";sleep(2);RunGameMenu=false;end},
+		[1]={"Play",function()menu="PlayMenu";selected=1;end},
 		[2]={"Test",function()term.clear();sleep(2);end},
 		[3]={"Hmmm",function()term.setBackgroundColour(colours.white);term.clear();sleep(2);end},
+		[4]={"Profile",function()end},
+	},
+	["PlayMenu"]={
+		[1]={"Career",function()end},
+		[2]={"Community",function()end},
+		[3]={"< Back",function()menu="MainMenu";selected=1;end},
 	},
 }
-local menu,selected = "MainMenu",1
+
 
 local function printMenu()
 	term.setBackgroundColour(colours.grey)
@@ -55,11 +64,11 @@ local function GameMenu()
 		if ev[1]=="mouse_click" then
 			if ev[3]<w/3 then
 				local index=math.ceil((ev[4]-5)/2)
-				if entries[index] then
+				if entries[menu][index] then
 					selected=index
 					printMenu()
-					sleep(0)
-					entries[index][2]()
+					sleep(0.01)
+					entries[menu][index][2]()
 				end
 			end
 		end
@@ -77,7 +86,7 @@ while true do
 	--printMenu()
 	local ev = {os.pullEvent()}
 	local ok,err=coroutine.resume(c,unpack(ev))
-	if not ok then error("Ended "..tostring(err or "(status:dead)"),0)
+	if not ok then error("Ended "..tostring(err or "(status:?)"),0)
 	elseif coroutine.status(c)=="dead"then break end
 end
 
