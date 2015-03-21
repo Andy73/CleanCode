@@ -152,7 +152,7 @@ end
 
 --TODO/IN_PROGRESS: add "AndySoft presents..." etc
 
-local function sw( txt, w8, x, y ) --slowwrite
+--[[local function sw( txt, w8, x, y ) --slowwrite
 	txt=tostring(txt).." "
 	if not x and y then x,y=term.getCursorPos() end
 	term.setCursorPos(x,y)
@@ -180,14 +180,42 @@ local function rsw( txt, w8, x, y ) --reverse slowwrite
 		end
 		sleep(w8 or 0)
 	end
+end]]
+
+local function sw( txt, w8, x, y, reverse ) --slowwrite
+	txt=tostring(txt).." "
+	if not x and y then x,y=term.getCursorPos() end
+	term.setCursorPos(x,y)
+	local cl={colours.white,colours.lightGrey,colours.grey,colours.black}
+	local c={}
+	if reverse<0 then
+		for i,v in ipairs(cl) do
+			c[#cl-i+1]=v
+		end
+	else
+		c=cl
+	end
+
+	for i=1,#txt do
+		for ii=0,#c-1 do
+			term.setCursorPos(x+i+ii,y)
+			term.setTextColour(c[ii+1])
+			term.write(ii==(reverse<0 and 0 or #c-1) and " " or (i+ii<#txt and txt:sub(i+ii,i+ii) or ""))
+		end
+		sleep(w8 or 0)
+	end
+
+	if reverse>0 then
+		sleep(reverse)
+		return sw(txt,w8,x,y,reverse*(-1))
+	end
 end
 
 term.setBackgroundColour(colours.black)
 term.setTextColour(colours.white)
 
-sw("AndySoft presents...",0.1,w/5,h/3)
-sleep(1)
-rsw("AndySoft presents...",0.1,w/5,h/3)
+sw("AndySoft presents...",0.1,w/5,h/3,1)
+
 --/TODO
 
 
