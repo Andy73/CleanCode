@@ -71,6 +71,28 @@ local function GameMenu()
 					entries[menu][index][2]()
 				end
 			end
+		elseif ev[1]=="key" then
+			--[[if ev[2]==keys.enter then
+				if entries[menu][selected] then
+					entries[menu][selected][2]()
+				end
+			end]]
+			local case={
+				[keys.enter]=function()
+					if entries[menu][selected] then
+						entries[menu][selected][2]()
+					end
+				end;
+				[keys.down]=function()
+					selected=selected+1
+					if #entries[menu]<selected then selected=1 end
+				end;
+				[keys.up]=function()
+					selected=selected-1
+					if 1>selected then selected=#entries[menu] end
+				end;
+			}
+			if case[ev[2]] then case[ev[2]]() end
 		end
 		term.setTextColor(colors.lightBlue)
 		printMenu()
