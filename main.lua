@@ -1,7 +1,7 @@
 local Path = "/"..shell.resolve"./".."/"
 local t=true
 local w,h=term.getSize()
-local doCredits=false
+local doCredits=not fs.exists(Path.."nocredits")
 
 local function load( path )
 	path=Path..path
@@ -197,6 +197,14 @@ term.setTextColour(colours.white)
 local s,x,y=0.1,w/5,h/3
 
 if doCredits then
+	local f=fs.open(Path.."nocredits","w")
+	f.write
+[[Delete this file if you 
+want to see opening 
+credits the next time you 
+run CleanCode.
+]]
+	f.close()
 	sw("AndySoft presents...",s,x,y,1)
 	sw("In association with Herobrine Technologies",0,x-5,y+2,0)
 	sleep(0.1)
@@ -206,8 +214,8 @@ if doCredits then
 	sleep(0.5)
 	sw("A MIT-licensed game",s,x,y,0.8)
 	sleep(0.2)
-	sw("CleanCode",0,math.floor(w/2)-4,math.floor(h/2),3)
-	sleep(1)
+	sw("CleanCode",0,math.floor(w/2)-5,math.floor(h/2),3)
+	sleep(3)
 end
 
 --/TODO

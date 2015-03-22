@@ -14,20 +14,44 @@ local function s()
 end
 
 local w,h=term.getSize()
-local used={x={none=true},y={none=true}}
-for i=1,w*h do
-	local x,y,cnt="none","none",1
-	while used.x[x] or used.y[y] do
-		x=used.x[x] and math.random(1,w) or x
-		y=used.y[y] and math.random(1,h) or y
-		cnt=cnt+1
-		if cnt%5==0 then sleep(0) end
-		Debug.BottomLeft(cnt)
+
+--[[for x=w,-3,-4 do
+	for i=0,3 do
+		for y=1,h,4 do
+			for _=0,i do
+				for __=0,i do
+					term.setCursorPos(x+_,y+__)
+					term.write(" ")
+				end
+			end
+		end
+		sleep(0)
 	end
-	term.setCursorPos(x,y)
-	term.write" "
-	used.x[x]=true
-	used.y[y]=true
+end]]
+
+local length=5
+
+for x=w,-length*2,-4 do
+	for y=1,h do
+		local len=length
+		--[[term.setBackgroundColour(colours.black)
+		term.clear()
+		term.setBackgroundColour(colours.grey)]]
+
+		for i=0,w-length do
+			if i%len==0 then
+				term.setCursorPos(x+i+(y%2),y)
+				term.write(" ")
+				if i>length*2 then
+					break
+				end
+				if len>1 then
+					len=len-1
+				end
+			end
+		end
+	end
 	sleep(0)
 end
 
+term.setCursorPos(1,1)
