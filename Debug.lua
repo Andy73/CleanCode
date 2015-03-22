@@ -18,8 +18,24 @@ lib.Print=function(str,name,d)
 	if i>h then i=1 end
 end
 
+lib.Serialize=function(tbl,indent)
+	local str=""
+	if not tonumber(indent) then indent=1 end
+	indent=string.rep("	",indent)
+	for k,v in pairs(tbl) do
+		if type(v)=="table" then
+			str=str..indent..tostring(k).."={"..lib.Serialize(v,#indent+1)..indent.."\n}"
+		elseif type(v)=="string" then
+			str=str.."\n"..indent..tostring(k).."=\""..tostring(v).."\""
+		else
+			str=str.."\n"..indent..tostring(k).."="..tostring(v)
+		end
+	end
+	return str
+end
+
 lib.PrintTable=function(tbl,...)
-	return lib.Print(textutils.serialize(tbl),...)
+	return lib.Print(lib.Serialize(tbl),...)
 end
 
 lib.Clear=function()
