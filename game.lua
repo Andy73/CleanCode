@@ -137,7 +137,7 @@ local function printgui()
 			term.write(v)
 		end
 
-		--print "x" for description
+		--print "x" button for closing the description
 		term.setCursorPos(w-1,3)
 		term.setTextColour(colours.red)
 		term.write"x"
@@ -164,10 +164,32 @@ local function printgui()
 
 end
 
+local function RunCode()
+	--TODO: add actual execution :D
+end
+
 local function main()
 	local case={
 		mouse_click=function(_,btn,x,y)
 			--code
+			if y==h and x>w-4 then --run button
+				return RunCode()
+			elseif y>(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
+				buffer.setCursorPosRelative(x,y) --HUGE TODO: BUFFERING!!!!
+				--TODO context menus?
+			elseif x==w-1 and y==3 and description then --x button, close desc.
+				description=false
+				--force reprint
+				term.setBackgroundColour(colours.grey)
+				term.clear()
+				return printgui()
+			elseif x==w-2 and y==2 and not description then
+				description=true
+				--force reprint
+				term.setBackgroundColour(colours.grey)
+				term.clear()
+				return printgui()
+			end
 		end,
 	}
 	while true do
@@ -180,7 +202,7 @@ end
 
 printgui()
 
-
+main()
 
 
 
