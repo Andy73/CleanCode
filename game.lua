@@ -3,7 +3,10 @@ local args = {...}
 local levels,level,load,s,saveLevel,saveGame,loadLevel,sw=unpack(args)
 
 local description=true --false when closed
+local MenuState="Editor"
 
+--why Lua, why? ;(
+local menu={}
 
 
 --[[
@@ -16,16 +19,6 @@ f.close()]]
 term.setBackgroundColour(colours.black)
 term.clear()
 term.setBackgroundColour(colours.grey)
-
-
-
-
-
-term.clear() --  <--REMOVE WHEN ANIMATION ENABLED
-
-
-
-
 
 
 local function s()
@@ -62,12 +55,6 @@ local length=5
 term.setCursorPos(1,1)
 
 
-local menu={
-	{"Hints",function()end,},
-	{"Documentation",function()end,},
-	{"Some button",function()end,}
-}
-
 local function wrap(text, maxWidth)
 	local lines = {''}
 	for word, space in text:gmatch('(%S+)(%s*)') do
@@ -92,7 +79,11 @@ local function wrap(text, maxWidth)
 	return lines
 end
 
+
+
 local function printgui()
+	term.setBackgroundColour(colours.grey)
+	term.clear()
 	--print level name as title
 	term.setCursorPos(4,(description and 3 or 2))
 	term.write(levels[level].name)
@@ -164,6 +155,28 @@ local function printgui()
 
 end
 
+local function printHints()
+	local oldDesc=description
+	description=false
+	printgui()
+
+	term.setBackgroundColour(colours.grey)
+	for y=3,h do
+		term.setCursorPos(1,y)
+		term.clearLine()
+	end
+
+	description=oldDesc
+end
+
+--why Lua? :'(
+menu={
+	{"Hints",function()printHints()end,},
+	{"Documentation",function()end,},
+	{"Some button",function()end,}
+}
+
+
 local function RunCode()
 	--TODO: add actual execution :D
 end
@@ -172,29 +185,61 @@ local function main()
 	local case={
 		mouse_click=function(_,btn,x,y)
 			--code
-			if y==h and x>w-4 then --run button
-				return RunCode()
-			elseif y>(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
-				buffer.setCursorPosRelative(x,y) --HUGE TODO: BUFFERING!!!!
-				--TODO context menus?
-			elseif x==w-1 and y==3 and description then --x button, close desc.
-				description=false
-				--force reprint
-				term.setBackgroundColour(colours.grey)
-				term.clear()
-				return printgui()
-			elseif x==w-2 and y==2 and not description then
-				description=true
-				--force reprint
-				term.setBackgroundColour(colours.grey)
-				term.clear()
-				return printgui()
+			if MenuState=="Editor" then
+				if y==h and x>w-4 then --run button
+					return RunCode()
+				elseif y>(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
+					buffer.setCursorPosRelative(x,y) --HUGE TODO: BUFFERING!!!!
+					--TODO context menus?
+				elseif x==w-1 and y==3 and description then --x button, close desc.
+					description=false
+					--force reprint
+					term.setBackgroundColour(colours.grey)
+					term.clear()
+					return printgui()
+				elseif x==w-2 and y==2 and not description then
+					description=true
+					--force reprint
+					term.setBackgroundColour(colours.grey)
+					term.clear()
+					return printgui()
+				elseif y==1 then --menu
+					local distance = 0
+					for k,v in pairs(menu) do
+						distance=distance+#v[1]
+						--print(distance)
+					end
+					distance=distance+#menu
+
+					--print("final="..distance)
+
+					local length=0
+					local i=false
+					for k,v in pairs(menu) do
+						length=length+#v[1]
+						--print(length)
+						if length+w-distance>=x then i=k break
+						elseif length+w-distance>w then break end
+					end
+					--print("key is "..tostring(i))
+					if i and type(menu[i][2])=="function" then 
+						if menu[i][1]=="Hints" then MenuState="Hint" end
+						menu[i][2]()
+					end
+				end
+			elseif MenuState=="Hint" then
+				if y==1 then
+					MenuState="Editor"
+					printgui()
+				elseif false then
+
+				end
 			end
 		end,
 	}
 	while true do
 		local ev={os.pullEvent()}
-
+		--printgui()
 		if case[ev[1]] then case[ev[1]](unpack(ev)) end
 	end
 end
@@ -203,10 +248,6 @@ end
 printgui()
 
 main()
-
-
-
-
 
 
 
