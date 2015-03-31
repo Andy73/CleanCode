@@ -192,6 +192,8 @@ local function RunCode()
 	--TODO: add actual execution :D
 end
 
+local buffer=Buffer.New()
+
 local function main()
 	local case={
 		mouse_click=function(_,btn,x,y)
