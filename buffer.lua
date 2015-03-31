@@ -47,7 +47,7 @@ lib.New=function(posx,posy)
 		bc=c
 	end
 
-	n.setTextColour=function(c)
+	n.setTextColour=function(c)--TODO join these
 		c=tonumber(c)
 		if not c or not colourLookup[c] then error("Invalid coulour!",2) end
 		tc=c

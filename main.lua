@@ -43,6 +43,7 @@ end
 load 'Debug.lua'
 load 'ParticleEffect.lua'
 load 'Buffer.lua'
+load 'Editor.lua'
 
 os.loadAPI(Path.."json")
 

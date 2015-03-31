@@ -13,9 +13,10 @@ local menu={}
 
 
 --[[
-local f=fs.open("/CleanCode/args","w")
-f.write(Debug.Serialize(args))
-f.close()]]
+	local f=fs.open("/CleanCode/args","w")
+	f.write(Debug.Serialize(args))
+	f.close()
+]]
 
 
 --local c={colours.black,colours.grey,colours.lightGrey,colours.white}
@@ -212,7 +213,7 @@ local function main()
 				if y==h and x>w-4 then --run button
 					return RunCode()
 				elseif y>=(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
-					buffer.setCursorPosRelative(x,y) --HUGE TODO: BUFFERING!!!!
+					buffer.setCursorPosRelative(x,y)
 					--TODO context menus?
 				elseif x==w-1 and y==3 and description then --x button, close desc.
 					description=false
