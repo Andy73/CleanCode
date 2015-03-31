@@ -6,6 +6,8 @@ if type(load)~="function" then error("Please run CleanCode with ./main.lua",0) e
 local description=true --false when closed
 local MenuState="Editor"
 
+local buffer
+
 --why Lua, why? ;(
 local menu={}
 
@@ -149,6 +151,8 @@ local function printgui()
 		term.write(string.rep(" ",w-2))
 	end
 
+	buffer.Draw()
+
 	--print the run button
 	term.setTextColour(colours.white)
 	term.setBackgroundColour(colours.green)
@@ -192,7 +196,8 @@ local function RunCode()
 	--TODO: add actual execution :D
 end
 
-local buffer=Buffer.New()
+buffer=Buffer.New(2,math.ceil(h/2)-1)
+buffer.Resize(w-4,h-math.ceil(h/2)-2)
 
 local function main()
 	local case={
@@ -206,12 +211,14 @@ local function main()
 					--TODO context menus?
 				elseif x==w-1 and y==3 and description then --x button, close desc.
 					description=false
+					buffer.Reposition(2,3)
 					--force reprint
 					term.setBackgroundColour(colours.grey)
 					term.clear()
 					return printgui()
 				elseif x==w-2 and y==2 and not description then --v button, open desc.
 					description=true
+					buffer.Reposition(2,math.ceil(h/2)-1)
 					--force reprint
 					term.setBackgroundColour(colours.grey)
 					term.clear()
@@ -249,6 +256,10 @@ local function main()
 				end
 			end
 		end,
+		char=function(_,ch)
+			buffer.write(ch)
+			return printgui()
+		end
 	}
 	while true do
 		local ev={os.pullEvent()}

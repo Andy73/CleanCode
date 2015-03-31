@@ -5,13 +5,13 @@ for k,v in pairs(colours) do
 	colourLookup[v]=k
 end
 
-lib.New=function()
+lib.New=function(posx,posy)
 	local n={} --new instance
 	local c={} --new instance's content
 
 	local w,h=1,1 --width, height
 	local x,y=1,1 --cursor position
-	local bc,tc=1,1 --background and text colour
+	local bc,tc=1,2 --background and text colour
 	local b,coloured=true,true --blink, advanced display
 
 	--prepare the content table
@@ -32,6 +32,7 @@ lib.New=function()
 		for i=1,#txt do
 			c[y][x+i-1]={bc,tc,txt:sub(i,i)}
 		end
+		x=x+#txt
 	end
 
 	n.setBackgroundColour=function(c)
@@ -63,15 +64,39 @@ lib.New=function()
 		b=x
 	end
 
+	n.getSize=function()
+		return w,h
+	end
+
+	n.setCursorPosRelative=function(_x,_y)
+		x=_x-posx
+		y=_y-posy
+	end
+
 	n.Draw=function()
+		--DEBUG
+			local f=fs.open("/CleanCode/content","w")
+			f.write(textutils.serialize(c))
+			f.close()
+		--/DEBUG
 		for _y,row in ipairs(c) do
 			for _x,px in ipairs(row) do
-				term.setCursorPos(posx+x-1,posy+y-1)
-				term.setBackgroundColour(px[1])
-				term.setTextColour(px[2])
-				term.write(px[3])
+				if _x-3<w and _y-3<h then
+					term.setCursorPos(posx+_x-1,posy+_y-1)
+					term.setBackgroundColour(px[1])
+					term.setTextColour(px[2])
+					term.write(px[3])
+				end
 			end
 		end
+	end
+
+	n.Reposition=function(x,y)
+		posx,posy=x,y
+	end
+
+	n.Resize=function(_w,_h)
+		w,h=_w,_h
 	end
 
 	--symlinks :P
