@@ -1,6 +1,7 @@
 local args = {...}
 
 local levels,level,load,s,saveLevel,saveGame,loadLevel,sw=unpack(args)
+if type(load)~="function" then error("Please run CleanCode with ./main.lua",0) end
 
 local description=true --false when closed
 local MenuState="Editor"
@@ -83,6 +84,7 @@ end
 
 local function printgui()
 	term.setBackgroundColour(colours.grey)
+	term.setTextColour(colours.white)
 	term.clear()
 	--print level name as title
 	term.setCursorPos(4,(description and 3 or 2))
@@ -166,6 +168,15 @@ local function printHints()
 		term.clearLine()
 	end
 
+	term.setTextColour(colours.lightBlue)
+
+	for i,v in ipairs(levels[level].hnts) do
+		for _,txt in ipairs(wrap(v,w-4)) do
+			term.setCursorPos(2,2+i*3+_)
+			term.write(txt)
+		end
+	end
+
 	description=oldDesc
 end
 
@@ -188,7 +199,7 @@ local function main()
 			if MenuState=="Editor" then
 				if y==h and x>w-4 then --run button
 					return RunCode()
-				elseif y>(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
+				elseif y>=(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
 					buffer.setCursorPosRelative(x,y) --HUGE TODO: BUFFERING!!!!
 					--TODO context menus?
 				elseif x==w-1 and y==3 and description then --x button, close desc.
@@ -197,7 +208,7 @@ local function main()
 					term.setBackgroundColour(colours.grey)
 					term.clear()
 					return printgui()
-				elseif x==w-2 and y==2 and not description then
+				elseif x==w-2 and y==2 and not description then --v button, open desc.
 					description=true
 					--force reprint
 					term.setBackgroundColour(colours.grey)
