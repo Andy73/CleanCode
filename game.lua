@@ -172,6 +172,11 @@ local function printHints()
 		term.clearLine()
 	end
 
+	-- remove "v" button
+	term.setCursorPos(w-2,2)
+	term.setBackgroundColour(colours.grey)
+	term.write" "
+
 	term.setTextColour(colours.lightBlue)
 
 	for i,v in ipairs(levels[level].hnts) do
@@ -197,7 +202,7 @@ local function RunCode()
 end
 
 buffer=Buffer.New(2,math.ceil(h/2)-1)
-buffer.Resize(w-4,h-math.ceil(h/2)-2)
+buffer.Resize(w-4,h-math.ceil(h/2)+1)
 
 local function main()
 	local case={
@@ -212,6 +217,7 @@ local function main()
 				elseif x==w-1 and y==3 and description then --x button, close desc.
 					description=false
 					buffer.Reposition(2,3)
+					buffer.Resize(w-4,h-3)
 					--force reprint
 					term.setBackgroundColour(colours.grey)
 					term.clear()
@@ -219,6 +225,7 @@ local function main()
 				elseif x==w-2 and y==2 and not description then --v button, open desc.
 					description=true
 					buffer.Reposition(2,math.ceil(h/2)-1)
+					buffer.Resize(w-4,h-math.ceil(h/2)+1)
 					--force reprint
 					term.setBackgroundColour(colours.grey)
 					term.clear()
@@ -259,7 +266,13 @@ local function main()
 		char=function(_,ch)
 			buffer.write(ch)
 			return printgui()
-		end
+		end,
+		key=function(_,key)
+			if key==keys.enter then
+				local _,_y=buffer.getCursorPos()
+				buffer.setCursorPos(1,_y+1)
+			end
+		end,
 	}
 	while true do
 		local ev={os.pullEvent()}

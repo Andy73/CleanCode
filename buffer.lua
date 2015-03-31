@@ -13,6 +13,7 @@ lib.New=function(posx,posy)
 	local x,y=1,1 --cursor position
 	local bc,tc=1,2 --background and text colour
 	local b,coloured=true,true --blink, advanced display
+	local scroll=0 --scroll modifier
 
 	--prepare the content table
 	for _y=1,h do
@@ -28,11 +29,16 @@ lib.New=function(posx,posy)
 	end
 
 	n.write=function(txt)
-		txt=tostring(txt)
-		for i=1,#txt do
-			c[y][x+i-1]={bc,tc,txt:sub(i,i)}
+		if x<=w then
+			txt=tostring(txt)
+			for i=1,#txt do
+				if c[y] then
+					c[y][x+i-1]={bc,tc,txt:sub(i,i)}
+					if x+i-1==w then break end
+				end
+			end
+			x=x+#txt
 		end
-		x=x+#txt
 	end
 
 	n.setBackgroundColour=function(c)
@@ -64,13 +70,26 @@ lib.New=function(posx,posy)
 		b=x
 	end
 
+	n.scroll=function(n)
+		if not tonumber(n) then error("Expected number, got "..type(n),2) end
+		
+	end
+
 	n.getSize=function()
 		return w,h
 	end
 
+	n.getCursorPos=function()
+		return x,y
+	end
+
+	n.isColour=function()
+		return coloured
+	end
+
 	n.setCursorPosRelative=function(_x,_y)
-		x=_x-posx
-		y=_y-posy
+		x=_x-posx+1
+		y=_y-posy+1
 	end
 
 	n.Draw=function()
@@ -81,7 +100,7 @@ lib.New=function(posx,posy)
 		--/DEBUG
 		for _y,row in ipairs(c) do
 			for _x,px in ipairs(row) do
-				if _x-3<w and _y-3<h then
+				if _x<=w and _y<=h then
 					term.setCursorPos(posx+_x-1,posy+_y-1)
 					term.setBackgroundColour(px[1])
 					term.setTextColour(px[2])
@@ -97,9 +116,20 @@ lib.New=function(posx,posy)
 
 	n.Resize=function(_w,_h)
 		w,h=_w,_h
+		for _y=1,h do
+			c[_y]=c[_y] or {}
+			for _x=1,w do
+				c[_y][_x]=c[_y][_x] or {bc,tc," "}
+				print("Pixel @ ".._y.."x".._x.." set.")
+				--if _y>h-2 then sleep(0)end
+			end
+		end
+		print"Resizing complete"
+		--sleep(1)
 	end
 
 	--symlinks :P
+	n.isColor=n.isColour
 	n.setTextColor=n.setTextColour
 	n.setBackgroundColor=n.setBackgroundColour
 
