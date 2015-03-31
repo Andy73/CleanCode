@@ -78,7 +78,7 @@ lib.New=function(posx,posy)
 		local str=""
 		for y=1,#c do
 			for x=1,#c[y] do
-				str=str..c[y][x]
+				str=str.."\n"..c[y][x]
 			end
 		end
 		if type(format)=="string" then return str:format(format) end
