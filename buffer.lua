@@ -72,7 +72,18 @@ lib.New=function(posx,posy)
 
 	n.scroll=function(n)
 		if not tonumber(n) then error("Expected number, got "..type(n),2) end
-		
+		scroll=scroll+n
+		for _y=1,h+scroll do
+			c[_y]=c[_y] or {}
+			for _x=1,w do
+				c[_y][_x]=c[_y][_x] or {bc,tc," "}
+				print("Pixel @ ".._y.."x".._x.." set.")
+				--if _y>h-2 then sleep(0)end
+			end
+		end
+		print(scroll)
+		print"Scrolling complete"
+		--sleep(1)
 	end
 
 	n.getSize=function()
@@ -89,7 +100,7 @@ lib.New=function(posx,posy)
 
 	n.setCursorPosRelative=function(_x,_y)
 		x=_x-posx+1
-		y=_y-posy+1
+		y=_y-posy+1+scroll
 	end
 
 	n.Draw=function()
@@ -98,9 +109,20 @@ lib.New=function(posx,posy)
 			f.write(textutils.serialize(c))
 			f.close()
 		--/DEBUG
-		for _y,row in ipairs(c) do
+		--[[for _y,row in ipairs(c) do
 			for _x,px in ipairs(row) do
-				if _x<=w and _y<=h then
+				if _x<=w and _y-scroll<=h then
+					term.setCursorPos(posx+_x-1,posy+_y-1)
+					term.setBackgroundColour(px[1])
+					term.setTextColour(px[2])
+					term.write(px[3])
+				end
+			end
+		end]]
+		for _y=1,#c do
+			for _x=1,(c[_y+scroll] and #c[_y+scroll] or 0) do
+				if _x<=w and _y-scroll<=h then
+					local px=c[_y+scroll][_x]
 					term.setCursorPos(posx+_x-1,posy+_y-1)
 					term.setBackgroundColour(px[1])
 					term.setTextColour(px[2])

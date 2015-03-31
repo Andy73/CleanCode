@@ -92,7 +92,7 @@ local function printgui()
 	term.setCursorPos(4,(description and 3 or 2))
 	term.write(levels[level].name)
 
-	--print menu of options (hints, docs, leave etc)
+	--print menu of options (hints, docs, leave etc) HUGE TODO: Fix this menu! (@EventHandler)
 		--calculate how far from right the items should be positioned
 		local distance = 0
 		for k,v in pairs(menu) do
@@ -193,7 +193,7 @@ end
 menu={
 	{"Hints",function()printHints()end,},
 	{"Documentation",function()end,},
-	{"Some button",function()end,}
+	{"Some button",function()error()end,}
 }
 
 
@@ -273,6 +273,10 @@ local function main()
 				buffer.setCursorPos(1,_y+1)
 			end
 		end,
+		mouse_scroll=function(_,n)
+			buffer.scroll(n)
+			printgui()
+		end
 	}
 	while true do
 		local ev={os.pullEvent()}
