@@ -6,7 +6,7 @@ if type(load)~="function" then error("Please run CleanCode with ./main.lua",0) e
 local description=true --false when closed
 local MenuState="Editor"
 
-local buffer
+local buffer,editor
 
 --why Lua, why? ;(
 local menu={}
@@ -215,7 +215,7 @@ local function main()
 				if y==h and x>w-4 then --run button
 					return RunCode()
 				elseif y>=(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
-					editor.setCursorPosRelative(x,y)
+					editor.SetCursorPosRelative(x,y)
 					--TODO context menus?
 				elseif x==w-1 and y==3 and description then --x button, close desc.
 					description=false

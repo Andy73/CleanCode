@@ -107,3 +107,5 @@ lib.New=function(posx,posy)
 
 	return n
 end
+
+_G.Editor=lib
