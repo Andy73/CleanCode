@@ -21,6 +21,7 @@ lib.New=function(posx,posy)
 		for i=1,n do
 			table.remove(c[y],x-1)
 		end
+		x=x-1
 	end
 
 	n.Delete=function(n) --TODO join these two
@@ -84,7 +85,7 @@ lib.New=function(posx,posy)
 		local out={}
 
 		for y=1,#c do
-			out[#out+1]=table.concat(c[y])
+			out[#out+1]=table.concat(c[y],"")
 		end
 
 		return out

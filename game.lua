@@ -18,6 +18,7 @@ local menu={}
 	f.close()
 ]]
 
+term.setCursorBlink(true) --DEBUG
 
 --local c={colours.black,colours.grey,colours.lightGrey,colours.white}
 term.setBackgroundColour(colours.black)
@@ -282,6 +283,11 @@ local function main()
 			if key==keys.enter then
 				local _,_y=editor.GetCursorPos()
 				editor.SetCursorPos(1,_y+1)
+			elseif key==keys.backspace then
+				editor.Backspace()
+				printgui()
+			elseif key==keys.delete then
+				editor.Delete()
 			end
 		end,
 		mouse_scroll=function(_,n)
