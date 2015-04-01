@@ -74,6 +74,11 @@ lib.New=function(posx,posy)
 		return n.SetCursorPos(a,b,ignore)
 	end
 
+	n.Reposition=function(a,b)
+		if type(a)~="number" or type(b)~="number" then error("Expected number, number",2)end
+		posx,posy=a,b
+	end
+
 	n.ToString=function(format)
 		local str=""
 		for y=1,#c do
