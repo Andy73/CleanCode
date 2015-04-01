@@ -17,6 +17,7 @@ lib.New=function(posx,posy)
 	local c={} --new instance's content
 
 	local insert=false --toggle insert/replace (false = insert new chars)
+	local x,y=1,1 --cursor position
 
 	n.Write=function(txt)
 		txt=tostring(txt)
@@ -98,6 +99,10 @@ lib.New=function(posx,posy)
 		end
 
 		return out
+	end
+
+	n.GetCusorPos=function()
+		return x,y
 	end
 
 	return n

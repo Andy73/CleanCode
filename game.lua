@@ -205,6 +205,8 @@ end
 buffer=Buffer.New(2,math.ceil(h/2)-1)
 buffer.Resize(w-4,h-math.ceil(h/2)+1)
 
+editor=Editor.New(2,math.ceil(h/2)-1)
+
 local function main()
 	local case={
 		mouse_click=function(_,btn,x,y)
@@ -213,12 +215,13 @@ local function main()
 				if y==h and x>w-4 then --run button
 					return RunCode()
 				elseif y>=(description and math.ceil(h/2)-1 or 3) and y<h and x>1 and x<w then --code placeholder
-					buffer.setCursorPosRelative(x,y)
+					editor.setCursorPosRelative(x,y)
 					--TODO context menus?
 				elseif x==w-1 and y==3 and description then --x button, close desc.
 					description=false
 					buffer.Reposition(2,3)
 					buffer.Resize(w-4,h-3)
+					editor.Reposition(2,3)
 					--force reprint
 					term.setBackgroundColour(colours.grey)
 					term.clear()
@@ -227,6 +230,7 @@ local function main()
 					description=true
 					buffer.Reposition(2,math.ceil(h/2)-1)
 					buffer.Resize(w-4,h-math.ceil(h/2)+1)
+					editor.Reposition(2,math.ceil(h/2)-1)
 					--force reprint
 					term.setBackgroundColour(colours.grey)
 					term.clear()
