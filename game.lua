@@ -151,6 +151,12 @@ local function printgui()
 		term.setCursorPos(2,y)
 		term.write(string.rep(" ",w-2))
 	end
+	buffer.clear()
+
+	for i,v in ipairs(editor.ToStringsByLines()) do
+		buffer.setCursorPos(1,i)
+		buffer.write(v)
+	end
 
 	buffer.Draw()
 
@@ -269,17 +275,17 @@ local function main()
 			end
 		end,
 		char=function(_,ch)
-			buffer.write(ch)
+			editor.Write(ch)
 			return printgui()
 		end,
 		key=function(_,key)
 			if key==keys.enter then
-				local _,_y=buffer.getCursorPos()
-				buffer.setCursorPos(1,_y+1)
+				local _,_y=editor.GetCursorPos()
+				editor.SetCursorPos(1,_y+1)
 			end
 		end,
 		mouse_scroll=function(_,n)
-			buffer.scroll(n)
+			buffer.scroll(n) --TODO!!!!
 			printgui()
 		end
 	}

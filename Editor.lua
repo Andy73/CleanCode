@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 local lib={}
 
 lib.New=function(posx,posy)
@@ -24,6 +12,7 @@ lib.New=function(posx,posy)
 		for i=1,#txt do
 			if not c[y] then c[y]={} end
 			c[y][x]=txt:sub(i,i)
+			x=x+1
 		end
 	end
 
@@ -101,7 +90,7 @@ lib.New=function(posx,posy)
 		return out
 	end
 
-	n.GetCusorPos=function()
+	n.GetCursorPos=function()
 		return x,y
 	end
 
