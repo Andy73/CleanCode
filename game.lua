@@ -167,6 +167,12 @@ local function printgui()
 	term.setCursorPos(w-4,h)
 	term.write"Run >"
 
+	--move blinking cursor to the right position
+	term.setTextColour(colours.black)
+	local _x,_y=editor.GetCursorPos()
+	_x=_x+2-1
+	_y=_y+(description and math.ceil(h/2)-1 or 3)-1
+	term.setCursorPos(_x,_y)
 end
 
 local function printHints()
@@ -277,7 +283,7 @@ local function main()
 		end,
 		char=function(_,ch)
 			editor.Write(ch)
-			return printgui()
+			printgui()
 		end,
 		key=function(_,key)
 			if key==keys.enter then
@@ -285,10 +291,16 @@ local function main()
 				editor.SetCursorPos(1,_y+1)
 			elseif key==keys.backspace then
 				editor.Backspace()
-				printgui()
 			elseif key==keys.delete then
 				editor.Delete()
+			elseif key==keys.left then
+				local _x,_y=editor.GetCursorPos()
+				editor.SetCursorPos(_x-1,_y)
+			elseif key==keys.right then
+				local _x,_y=editor.GetCursorPos()
+				editor.SetCursorPos(_x+1,_y)			
 			end
+			printgui() --TODO: hmm is this right?
 		end,
 		mouse_scroll=function(_,n)
 			buffer.scroll(n) --TODO!!!!
