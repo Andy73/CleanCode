@@ -14,3 +14,11 @@ end
 --summon FallingSand x y z {TileID:5,Time:2,Motion:[0.0,0.0,0.5]}
 
 
+--[[
+Todo:
+-make this into an API
+-use commands.getBlockPosition (or how its called)
+-OOP!!!
+-would be nice to cheCck If the blocks fell on the right spot!
+-more awesomeness to come
+]]
