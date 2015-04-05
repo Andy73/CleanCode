@@ -41,5 +41,6 @@ Todo:
 -use commands.getBlockPosition (or how its called)
 -OOP!!!
 -would be nice to cheCck If the blocks fell on the right spot!
+-better barrier simulation
 -more awesomeness to come
 ]]
