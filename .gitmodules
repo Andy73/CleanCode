@@ -1,0 +1,3 @@
+[submodule "cccitygen"]
+	path = cccitygen
+	url = https://github.com/viluon/cccitygen.git
