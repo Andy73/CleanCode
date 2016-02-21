@@ -1,0 +1,14 @@
+
+{
+	Language = "English";
+	Tokens = {
+		opening_credits = {
+			[ 1 ] = "AndySoft Presents";
+			[ 2 ] = "In Association with";
+			[ 3 ] = "Herobrine Technologies";
+			[ 4 ] = "And Atorture Science";
+			[ 5 ] = "An Open Source Game";
+			[ 6 ] = "CleanCode";
+		};
+	};
+}
