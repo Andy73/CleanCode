@@ -14,4 +14,4 @@ install:
   - luarocks install luacov-coveralls
 
 script:
-  - lua tests/testCompileAll.lua
+  - lua tests/testAllCompile.lua
