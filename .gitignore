@@ -1,3 +1,8 @@
+
+*.sublime-project
+*.sublime-workspace
+
+# Old ignores, keeping these for historical reasons
 nocredits
 args
 argsY
@@ -5,5 +10,3 @@ content
 edit-plus.lua
 asdf
 hilight
-CleanCode.sublime-project
-CleanCode.sublime-workspace
