@@ -29,7 +29,7 @@ for k, path in pairs( tables ) do
 		error( err )
 	end
 
-	local f, err = io.open( cwd .. path, "r" )
+	local f, err = io.open( cwd .. "/" .. path, "r" )
 	if not f then
 		error( err )
 	end
