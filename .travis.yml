@@ -12,6 +12,7 @@ before_install:
 
 install:
   - luarocks install luacov-coveralls
+  - luarocks install luafilesystem
 
 script:
   - lua tests/testAllCompile.lua
