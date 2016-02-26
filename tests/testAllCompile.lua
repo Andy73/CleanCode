@@ -18,7 +18,7 @@ end
 for k, path in pairs( tables ) do
 	print( "  Compiling table " .. path .. "..." )
 	
-	local f = io.open( "../" .. path )
+	local f = io.open( "../" .. path, "r" )
 	local content = f:read( "*a" )
 	f:close()
 
