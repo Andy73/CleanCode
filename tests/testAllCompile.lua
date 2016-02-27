@@ -7,6 +7,7 @@ end
 
 local files = {
 	"credits.lua";
+	"lib/require.lua";
 }
 
 local tables = {
