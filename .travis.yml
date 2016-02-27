@@ -16,3 +16,4 @@ install:
 
 script:
   - lua tests/testAllCompile.lua
+  - lua tests/testPenlightRequire.lua
