@@ -54,9 +54,9 @@ end
 term.setBackgroundColour( colours.black )
 term.clear()
 
-local f = fs.open( "/language.tbl", "r" )
-local contents = f.readAll()
-f.close()
+local f = io.open( "/language.tbl", "r" )
+local contents = f:read( "*a" )
+f:close()
 
 shared.language = textutils.unserialize( contents )
 
